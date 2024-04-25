@@ -6,12 +6,17 @@ import { Formstack } from "./mod.ts";
 try {
 
     const formstack = new Formstack(env.FORMSTACK_ACCESS_TOKEN);
-    
+
     const smartlists = await formstack.get_smartlists()
     console.log('smartlists',smartlists.length)
 
-    const options = await formstack.get_smartlist_options(smartlists[0].id)
-    console.log('options',options.length)
+    await formstack.new_smartlist_option(123456, [{
+        label: 'Zebra',
+        value: '123'
+    }])
+
+    const options = await formstack.get_smartlist_options(123456)
+    console.log('options',options[options.length-1])
 
 } catch (error) {
     console.error(error.message)

@@ -1,3 +1,5 @@
+import { SmartListOptionType } from './types.ts'
+
 export class Formstack {
 
   public base_uri: string = 'https://www.formstack.com/api/v2';
@@ -63,7 +65,7 @@ export class Formstack {
     if (name) params.append('query',name)
     
     let url = params.size>0 ? `${this.base_uri}/smartlist/${id}/option?${ params.toString() }` : `${this.base_uri}/smartlist/${id}/option`;
-    console.log('url',url)
+    // console.log('url',url)
 
     let options: Array<object> = [];
     let proceed: boolean = false;
@@ -89,7 +91,7 @@ export class Formstack {
       // next page of data
       params.set('page',content.page+1)
       url = `${this.base_uri}/smartlist/${id}/option?${ params.toString() }`;
-      console.log('url',url)
+      // console.log('url',url)
 
       // proceed if paged results are less than the total records
       proceed = content.page * content.perPage < content.total
@@ -97,6 +99,35 @@ export class Formstack {
     } while (proceed);
 
     return options;
+
+  }
+
+  new_smartlist_option = async (
+    id: number,
+    options: Array<SmartListOptionType>
+) => {
+
+    const body = {
+      options: options
+    }
+    console.log('body',body)
+
+    return await fetch(`${this.base_uri}/smartlist/${id}/bulkoptions`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this.access_token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            return Promise.reject(response);
+        }
+        return response.text();
+    })
+    .then((data) => data)
 
   }
 
