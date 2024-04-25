@@ -16,7 +16,10 @@ try {
     }])
 
     const options = await formstack.get_smartlist_options(123456)
-    console.log('options',options[options.length-1])
+    console.log('options',options.length)
+
+    const option_id = options[options.length-1]
+    await formstack.remove_smartlist_option(123456, option_id)
 
 } catch (error) {
     console.error(error.message)

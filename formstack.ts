@@ -131,4 +131,26 @@ export class Formstack {
 
   }
 
+  remove_smartlist_option = async (
+    id: number,
+    option_id: number
+) => {
+
+    return await fetch(`${this.base_uri}/smartlist/${id}/option/${option_id}`, {
+        method: "DELETE",
+        headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this.access_token}`,
+        },
+    })
+    .then((response) => {
+        if (!response.ok) {
+            return Promise.reject(response);
+        }
+        return response.text();
+    })
+    .then((data) => data)
+
+  }
+
 }
